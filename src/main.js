@@ -8,7 +8,7 @@ const api =  axios.create({
 async function getTrendingMoviesPreview(){
     const {data,status} = await api.get('trending/movie/day?language=en-US')
 
-    console.log(data)
+    // console.log(data)
     const movies = data.results;
 
     movies.forEach(movie => {
@@ -52,4 +52,3 @@ async function getCategoriesPreview(){
 
 getCategoriesPreview()
 getTrendingMoviesPreview()
-
