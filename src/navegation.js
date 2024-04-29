@@ -1,6 +1,21 @@
-searchFormBtn.addEventListener('click',()=> location.hash =  '#search=');
+searchFormBtn.addEventListener('click',(event)=> {
+    event.preventDefault()
+     location.hash =  '#search='+ searchFormInput.value;
+});
 trendingBtn.addEventListener('click',()=> location.hash =  '#trends=');
-arrowBtn.addEventListener('click',()=> location.hash =  '#home');
+
+arrowBtn.addEventListener('click',(event)=>{
+    event.preventDefault()
+
+    const previousPageUrl = document.referrer;
+    const currentDomain = window.location.host;
+
+    if (previousPageUrl.includes(currentDomain)) {
+        window.history.back();
+    } else {
+        window.location.href = 'https://' + currentDomain;
+    }
+});
 
 
 
@@ -21,6 +36,7 @@ function navigator(){
     } else{
         homePage();
     }
+    window.scrollTo(0, 0);
 }
 
 function homePage() {
@@ -90,11 +106,11 @@ function searchPage() {
     console.log('estas en la seccion search');
 
     headerSection.classList.remove('header-contianer--long');
-    headerSection.style.background= '';
+    // headerSection.style.background= '';
     arrowBtn.classList.remove('inactive');
     arrowBtn.classList.remove('header-arrow--white');
     headerTitle.classList.add('inactive');
-    headerCategoryTitle.classList.remove('inactive');
+    headerCategoryTitle.classList.add('inactive');
     searchForm.classList.remove('inactive');
 
 
@@ -102,6 +118,10 @@ function searchPage() {
     categoriesPreviewSection.classList.add('inactive');
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
+
+    
+    const [_,query] =  location.hash.split('=');
+    getMoviesBySearch(query);
 }
 function trendPage() {
     console.log('estas en la seccion trends');
