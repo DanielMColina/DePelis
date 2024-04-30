@@ -2,7 +2,11 @@ searchFormBtn.addEventListener('click',(event)=> {
     event.preventDefault()
      location.hash =  '#search='+ searchFormInput.value;
 });
-trendingBtn.addEventListener('click',()=> location.hash =  '#trends=');
+
+trendingBtn.addEventListener('click',()=> {
+    location.hash =  '#trends='
+    trendPage()
+});
 
 arrowBtn.addEventListener('click',(event)=>{
     event.preventDefault()
@@ -139,4 +143,8 @@ function trendPage() {
     categoriesPreviewSection.classList.add('inactive');
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
+
+    headerCategoryTitle.innerText = 'Trends'
+
+    getTrendingMovies()
 }

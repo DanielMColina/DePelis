@@ -44,6 +44,7 @@ function createCategories(categories, container){
         container.appendChild(categoryContainer);
     })
 }
+
 // llamdos a la api 
 
 async function getTrendingMoviesPreview(){
@@ -82,4 +83,11 @@ async function getMoviesBySearch(query){
     const movies = data.results;
 
     createMovies(movies,genericSection);
+}
+
+async function getTrendingMovies(){
+    const{data} = await api('trending/movie/day',);
+    const movies = data.results;
+
+    createMovies(movies, genericSection)
 }
