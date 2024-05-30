@@ -103,6 +103,7 @@ button {
 
 .movie-container {
   cursor: pointer;
+  position: relative;
 }
 .movie-container--loading {
   background: var(--purple-light-2);
@@ -126,8 +127,28 @@ button {
 
 .movie-img {
   border-radius: 8px;
-  min-height: 180px;
+  min-height: 175px;
 }
+.movie-btn{
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  height: 40px;
+  width:40px;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+}
+.movie-btn::before{
+  content: '🤍';
+  font-size: 20px;
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.9));
+}
+.movie-btn--liked::before{
+  transition: 0.7s;
+  content: '❤️';
+}
+
 
 .categoriesPreview-list, .categories-list {
   display: flex;
@@ -162,7 +183,7 @@ button {
   background-image: url('');
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 19.27%, rgba(0, 0, 0, 0) 29.17%), url();
   background-size: cover !important;
-  height: 480px;
+  height: 520px;
   position: fixed;
   top: 0;
   width: 100%;
