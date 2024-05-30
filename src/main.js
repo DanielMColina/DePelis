@@ -15,8 +15,41 @@ const lazyLoader = new IntersectionObserver((entries)=>{
     });
 })
 
-function createMovies(movies, container, lazyLoad = false){
-    container.innerHTML='';
+const BottomScroll = new IntersectionObserver((entries, observer)=>{ 
+    entries.forEach((entry)=>{
+        if(entry.isIntersecting){
+            currentPage++
+            wrapperFunc(currentEndPoint, currentPage,categoryId, searchQuery)
+        }
+    })
+})
+
+function lastTargetElement(){
+    let movieInScreen = document.querySelectorAll('.movie-container .movie-img');
+    let lastMovie = movieInScreen[movieInScreen.length-1];
+    return lastMovie
+}
+
+// const variableParameters = {
+//     currentEndPoint,
+//     currentPage : 0,
+//     categoryId : false,
+//     searchQuery : false
+// }
+
+let currentEndPoint;
+let currentPage = 0;
+let categoryId = false;
+let searchQuery = false;
+
+const  wrapperFunc = (endPoint,Page, category, query)=> {
+    return infiniteScroll(endPoint,Page,category,query);
+};
+
+function createMovies(movies, container, {lazyLoad = false, clean = true, isInfiniteScroll = false} = {}){
+    if(clean){
+        container.innerHTML='';
+    }
 
     movies.forEach(movie => {
         const movieContainer = document.createElement('div');
@@ -40,7 +73,11 @@ function createMovies(movies, container, lazyLoad = false){
 
         movieContainer.appendChild(movieImg);
         container.appendChild(movieContainer);
-})
+
+    });
+    if(isInfiniteScroll){
+        BottomScroll.observe(lastTargetElement());
+    }
 }
 function createCategories(categories, container){
     container.innerHTML ="";
@@ -73,7 +110,7 @@ async function getTrendingMoviesPreview(){
     // console.log(data)
     const movies = data.results;
 
-    createMovies(movies, trendingMoviesPreviewList, true);
+    createMovies(movies, trendingMoviesPreviewList);
 };
 
 async function getCategoriesPreview(){
@@ -91,7 +128,9 @@ async function getMoviesByCategory(id){
     })
     const movies = data.results;
 
-    createMovies(movies,genericSection, true);
+    createMovies(movies,genericSection, {lazyLoad:true, isInfiniteScroll:true});
+    currentPage = 1;
+    categoryId = id;
 }
 
 async function getMoviesBySearch(query){
@@ -99,17 +138,64 @@ async function getMoviesBySearch(query){
         params:{
             query,
         }
-    })
+    });
     const movies = data.results;
 
-    createMovies(movies,genericSection);
+    createMovies(movies,genericSection,{lazyLoad: true,isInfiniteScroll:true});
+    searchQuery = query;
+    currentPage = 1;
 }
 
 async function getTrendingMovies(){
-    const{data} = await api('trending/movie/day',);
+    const{data} = await api('trending/movie/day');
     const movies = data.results;
 
-    createMovies(movies, genericSection)
+    createMovies(movies, genericSection ,{lazyLoad:true, isInfiniteScroll:true});
+    currentEndPoint = 'trending/movie/day';
+    currentPage = 1;
+}
+
+async function infiniteScroll(endPoint, page,categoryId = false, query){
+    let  currentData;
+    if(query){
+        const {data} = await api.get('search/movie',{
+            params:{
+                page,
+                query
+            }
+        });
+        currentData = data
+    }
+    else if(categoryId){
+        const {data} = await api.get('discover/movie',{
+            params:{
+                page,
+                with_genres:categoryId
+            }
+        })
+        currentData = data
+    }else{
+        const{data} = await api(endPoint, {
+            params:{page}
+        });
+        currentData = data
+    }
+    console.log(currentData)
+    const movies = currentData.results
+    const maxPage = currentData.page <= currentData.total_pages 
+
+    BottomScroll.observe(lastTargetElement());
+    BottomScroll.unobserve(lastTargetElement());
+    
+    if(maxPage){
+        createMovies(movies, genericSection ,{lazyLoad:true, clean:false,isInfiniteScroll:true});
+    }else{
+        const containerText = document.createElement('div')
+        const textEndScroll = document.createTextNode('No hay mas peliculas');
+        containerText.classList.add('message');
+        containerText.appendChild(textEndScroll)
+        genericSection.appendChild(containerText);
+    }
 }
 
 async function getMovieById(id){
@@ -131,6 +217,6 @@ async function getRelatedMoviesId(id){
     const {data} = await api(`movie/${id}/recommendations`);
     const relatedMovies = data.results;
 
-    createMovies(relatedMovies,relatedMoviesContainer )
+    createMovies(relatedMovies,relatedMoviesContainer)
 }
 
