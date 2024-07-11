@@ -56,12 +56,22 @@ function homePage() {
     categoriesPreviewSection.classList.remove('inactive');
     genericSection.classList.add('inactive');
     movieDetailSection.classList.add('inactive');
-    likedContainer.classList.remove('inactive');
+    headerPoster.classList.remove('inactive')
 
 
     getCategoriesPreview();
     getTrendingMoviesPreview();
-    getLikedMovies();
+    getPosterMovies()
+    
+    window.addEventListener('localStoregeChange',()=>{
+        if (localStorage.liked_movies[2] !== undefined) {
+            getLikedMovies()   
+            likedContainer.classList.remove('inactive');
+        }else{
+            likedContainer.classList.add('inactive');
+
+        }      
+    })
 }
 function categoryPage(){
     headerSection.classList.remove('header-container--long');
@@ -78,6 +88,7 @@ function categoryPage(){
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
     likedContainer.classList.add('inactive');
+    headerPoster.classList.add('inactive')
 
 
     const [_,categoryData] =  location.hash.split('=');
@@ -105,7 +116,7 @@ function movieDetailsPage() {
     genericSection.classList.add('inactive');
     movieDetailSection.classList.remove('inactive');
     likedContainer.classList.add('inactive');
-
+    headerPoster.classList.add('inactive')
 
 // ['#movie', '215515']
     const [_, movieId] = location.hash.split('=');
@@ -127,6 +138,7 @@ function searchPage() {
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
     likedContainer.classList.add('inactive');
+    headerPoster.classList.add('inactive')
 
     
     const [_,query] =  location.hash.split('=');
@@ -147,6 +159,8 @@ function trendPage() {
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
     likedContainer.classList.add('inactive');
+    headerPoster.classList.add('inactive')
+
 
 
     headerCategoryTitle.innerText = 'Trends'

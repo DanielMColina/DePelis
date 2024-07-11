@@ -18,7 +18,29 @@
         <span class="header-arrow inactive">&lt;</span>
         <h1 class="header-title">DePelis</h1>
         <h1 class="header-title header-title--categoryView inactive">Acción</h1>
-    
+        
+        <section class="header-poster"> 
+          <div class="header-poster--loading"></div>
+          <div class="poster">
+            <div class="poster-details">
+              <h2 class="poster-title .header-poster-items--loading"></h2>
+              <span class="poster-average"></span>
+            </div>
+
+            <div class="container-poster-btn">
+              <button class="poster-btn poster-btn--details">Detalles</button>
+              <button class="poster-btn poster-btn--trailer">Trailer</button>
+            </div>  
+
+            <img src="" alt="" class="poster-img ">
+          </div>
+
+          
+          <button class="header-poster-btn poster-btn--preview"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="header-poster-btn poster-btn--next"><i class="fa-solid fa-chevron-right"></i></button>
+        </section>
+
+        
         <form id="searchForm" class="header-searchForm">
           <input type="text" placeholder="Vengadores" />
           <button id="searchBtn">🔍</button>
@@ -61,7 +83,7 @@
         </article>
       </section>
     
-      <section id="liked" class="liked-container">
+      <section id="liked" class="liked-container inactive">
         <div class="liked-header">
           <h2 class="liked-title">Peliculas favoritas</h2>
         </div>

@@ -29,10 +29,18 @@ function likeMovie(movie){
     }else{
         likedMovies[movie.id] = movie;
     }
-    localStorage.setItem('liked_movies',JSON.stringify(likedMovies))
+    ChangeLocalStorage('liked_movies',JSON.stringify(likedMovies))
 }
 
 // Utils
+function ChangeLocalStorage(key, value){
+    localStorage.setItem(key,value);
+    const event = new CustomEvent('localStoregeChange',{
+        detail: { key: key, value: value } 
+    });
+    window.dispatchEvent(event)
+}
+
 const lazyLoader = new IntersectionObserver((entries)=>{
     entries.forEach((entry)=>{
         if(entry.isIntersecting){
@@ -104,6 +112,10 @@ function createMovies(movies, container, {lazyLoad = false, clean = true, isInfi
             getLikedMovies();
         });
 
+        window.addEventListener('localStoregeChange',()=>{
+            likedMoviesList()[movie.id] || movieBtnFav.classList.remove('movie-btn--liked');          
+        })
+
         if(lazyLoad){
             lazyLoader.observe(movieImg);
         };
@@ -113,6 +125,7 @@ function createMovies(movies, container, {lazyLoad = false, clean = true, isInfi
         container.appendChild(movieContainer);
 
     });
+
     if(isInfiniteScroll){
         BottomScroll.observe(lastTargetElement());
     }
@@ -249,7 +262,52 @@ async function getMovieById(id){
 
     getRelatedMoviesId(id)
 }
+function renderPoster(movie){
+    const posterTitle = document.querySelector('.poster-title');
+    const posterAverage = document.querySelector('.poster-average');
+    const posterImg = document.querySelector('.poster-img');
+    const posterBtnDetails = document.querySelector('.poster-btn--details');
+    const posterBtnTrailer = document.querySelector('.poster-btn--trailer');
 
+    posterTitle.innerText = movie.title;
+    posterAverage.innerText = `⭐ ${movie.vote_average.toFixed(2)}`;
+    posterImg.src = `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`;
+
+    posterBtnDetails.addEventListener('click',()=>{
+        location.hash = ''
+        location.hash = '#movie=' + movie.id
+    })
+}
+async function getPosterMovies(){
+    const {data} = await api('trending/movie/day');
+    const movies = data.results.slice(0,5);
+    
+
+    console.log('se llamo la api')
+    let indexPoster = 0;
+    let currentPoster = movies[0];
+
+    const buttonsNextPrev = document.querySelectorAll('.header-poster-btn');
+    const arrayBtns = Array.from(buttonsNextPrev);
+    
+
+    arrayBtns.forEach((btn)=>{
+        btn.addEventListener('click',()=>{
+            if(btn.classList.contains('poster-btn--preview') && indexPoster > 0){
+                indexPoster--
+                currentPoster = movies[indexPoster]
+                renderPoster(currentPoster)
+            }
+             if(btn.classList.contains('poster-btn--next') && indexPoster <= 3){
+                indexPoster++
+                currentPoster = movies[indexPoster]
+                renderPoster(currentPoster)
+            }
+        })
+    })
+    headerPosterLoading.classList.add('inactive')
+    renderPoster(currentPoster)
+}
 async function getRelatedMoviesId(id){
     const {data} = await api(`movie/${id}/recommendations`);
     const relatedMovies = data.results;

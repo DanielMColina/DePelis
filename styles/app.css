@@ -1,5 +1,8 @@
 /* General */
-* { box-sizing: border-box; }
+* { 
+  box-sizing: border-box; 
+  /* font-size: 62.5%; */
+}
 
 :root {
   --purple-light-1: #FBFAFB;
@@ -89,7 +92,7 @@ button {
 
 
 /* Shared */
-.header-container, .trendingPreview-header, .categoriesPreview-container, .liked-header {
+.header-title ,.header-searchForm,.poster-details, .trendingPreview-header, .categoriesPreview-container, .liked-header {
   padding: 0 24px;
 }
 
@@ -177,6 +180,7 @@ button {
 /* Header */
 .header-container {
   padding-top: 40px;
+  overflow: hidden;
 }
 
 .header-container--long {
@@ -228,8 +232,73 @@ button {
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
 }
+/* header Posters */
+.header-poster{
+  position: relative;
+  margin-bottom: 20px;
+}
+.header-poster--loading{
+  background: var(--purple-light-2);
+  width: 100%;
+  height: 210px;
+  animation: loading-skeleton infinite 1.5s;
+}
+.poster{
+  position:relative;
+}
+.poster-img{
+  width: 100vw;
+  object-fit: contain;
+}
 
-
+.poster-details{
+  position: absolute;
+  top: 20px;
+}
+.poster-title{
+  font-size: 20px;
+  font-weight: 800;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+  color: #EEEAF2;
+}
+.poster-average{
+  font-size: 12px;
+  font-weight: 800;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+  color: #EEEAF2;
+}
+.container-poster-btn{
+  position: absolute;
+  left: 20px;
+  bottom:20px;
+}
+.poster-btn{
+  padding:4px 8px;
+  border-radius: 4px;
+  font-family: var(--font-family-text);
+  font-size: 14px;
+  font-weight: 500;
+  margin-right: 4px;
+}
+.header-poster-btn{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  background-color: transparent;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+  opacity: .5;
+}
+.header-poster-btn:hover{
+  opacity: 1;
+  cursor: pointer;
+}
+.poster-btn--preview{
+  left: 10px;
+}
+.poster-btn--next{
+  right: 10px;
+}
 /* Trending */
 .trendingPreview-header{
   display: flex;
@@ -238,9 +307,10 @@ button {
 }
 
 .trendingPreview-btn {
-  border-radius: 8px;
-  height: 32px;
-  width: 72px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-family: var(--font-family-text);
 }
 
 .trendingPreview-movieList, .liked-movieList{
@@ -334,6 +404,7 @@ button {
 
 /* Movie Detail */
 .movieDetail-container {
+  width: 100%;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
   padding: 32px 24px;
