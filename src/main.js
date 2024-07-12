@@ -262,23 +262,52 @@ async function getMovieById(id){
 
     getRelatedMoviesId(id)
 }
+async function getRelatedMoviesId(id){
+    const {data} = await api(`movie/${id}/recommendations`);
+    const relatedMovies = data.results;
+
+    createMovies(relatedMovies,relatedMoviesContainer)
+}
+
+function getLikedMovies(){
+    const likedMovies = likedMoviesList();
+    const arrLikedMovies = Object.values(likedMovies);
+    createMovies(arrLikedMovies, likedMoviesListContainer,{lazyLoad: true, clean:true})
+}
+
+// poster
+function posterResponsive(movie, img){
+    const viwportWidth =    window.innerWidth;
+    let src;
+
+    if(viwportWidth >= 600){
+       src = `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`;
+    }else if(viwportWidth >= 300 && viwportWidth < 600){
+        src = `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`;
+    }else{
+        src = `https://image.tmdb.org/t/p/w300/${movie.backdrop_path}`;
+    }
+    
+    img.src = src;
+}
 function renderPoster(movie){
     const posterTitle = document.querySelector('.poster-title');
     const posterAverage = document.querySelector('.poster-average');
     const posterImg = document.querySelector('.poster-img');
     const posterBtnDetails = document.querySelector('.poster-btn--details');
     const posterBtnTrailer = document.querySelector('.poster-btn--trailer');
-    const viwportWidth =    window.innerWidth
+
 
     posterTitle.innerText = movie.title;
     posterAverage.innerText = `⭐ ${movie.vote_average.toFixed(2)}`;
-    if(viwportWidth > 500){
-        posterImg.src = `https://image.tmdb.org/t/p/original/${movie.ackdrop_path}`;
 
-    }else{
-        posterImg.src = `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`;
+    posterResponsive(movie, posterImg);
+
+
+    window.onresize = ()=>{
+        posterResponsive(movie, posterImg);
     }
-
+ 
     posterBtnDetails.addEventListener('click',()=>{
         location.hash = ''
         location.hash = '#movie=' + movie.id
@@ -313,16 +342,4 @@ async function getPosterMovies(){
     })
     headerPosterLoading.classList.add('inactive')
     renderPoster(currentPoster)
-}
-async function getRelatedMoviesId(id){
-    const {data} = await api(`movie/${id}/recommendations`);
-    const relatedMovies = data.results;
-
-    createMovies(relatedMovies,relatedMoviesContainer)
-}
-
-function getLikedMovies(){
-    const likedMovies = likedMoviesList();
-    const arrLikedMovies = Object.values(likedMovies);
-    createMovies(arrLikedMovies, likedMoviesListContainer,{lazyLoad: true, clean:true})
 }
