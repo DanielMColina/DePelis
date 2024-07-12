@@ -268,10 +268,16 @@ function renderPoster(movie){
     const posterImg = document.querySelector('.poster-img');
     const posterBtnDetails = document.querySelector('.poster-btn--details');
     const posterBtnTrailer = document.querySelector('.poster-btn--trailer');
+    const viwportWidth =    window.innerWidth
 
     posterTitle.innerText = movie.title;
     posterAverage.innerText = `⭐ ${movie.vote_average.toFixed(2)}`;
-    posterImg.src = `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`;
+    if(viwportWidth > 500){
+        posterImg.src = `https://image.tmdb.org/t/p/original/${movie.ackdrop_path}`;
+
+    }else{
+        posterImg.src = `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`;
+    }
 
     posterBtnDetails.addEventListener('click',()=>{
         location.hash = ''
@@ -283,7 +289,7 @@ async function getPosterMovies(){
     const movies = data.results.slice(0,5);
     
 
-    console.log('se llamo la api')
+    console.log(data)
     let indexPoster = 0;
     let currentPoster = movies[0];
 
