@@ -17,7 +17,7 @@ const likedContainer = document.querySelector('.liked-container');
 
 
 // Elements
-const headerTitle = document.querySelector('.header-title');
+const headerTitle = document.querySelector('.header-container--title');
 const headerPosterLoading = document.querySelector('.header-poster--loading');
 const arrowBtn = document.querySelector('.header-arrow');
 const headerCategoryTitle = document.querySelector('.header-title--categoryView');

@@ -15,10 +15,19 @@
 </head>
 <body>
     <header id="header" class="header-container">
-        <span class="header-arrow inactive">&lt;</span>
-        <h1 class="header-title">DePelis</h1>
-        <h1 class="header-title header-title--categoryView inactive">Acción</h1>
-        
+      <span class="header-arrow inactive">&lt;</span>
+      <h1 class="header-title--categoryView inactive">Acción</h1>   
+      
+      <div class="header-container--title">
+          <h1 class="header-title">DePelis</h1>
+          <div class="header-menu-container">
+            <ul>
+              <li class="menu-items"><a href="#categories">Categorias</a></li>
+              <li class="menu-items"><a href="#liked">Favoritos</a></li>
+            </ul>
+          </div>
+        </div>
+
         <section class="header-poster"> 
           <div class="header-poster--loading"></div>
           <div class="poster">
@@ -27,10 +36,9 @@
               <span class="poster-average"></span>
             </div>
 
-            <div class="container-poster-btn">
+  
               <button class="poster-btn poster-btn--details">Detalles</button>
-              <button class="poster-btn poster-btn--trailer">Trailer</button>
-            </div>  
+ 
 
             <img src="" alt="" class="poster-img ">
           </div>
@@ -46,7 +54,7 @@
           <button id="searchBtn">🔍</button>
         </form>
       </header>
-    
+
       <section id="trendingPreview" class="trendingPreview-container">
         <div class="trendingPreview-header">
           <h2 class="trendingPreview-title">Tendencias</h2>
@@ -69,7 +77,7 @@
       </section>
     
       <section id="categoriesPreview" class="categoriesPreview-container">
-        <h2 class="categoriesPreview-title">Categorías</h2>
+        <h2 class="categoriesPreview-title" id="categories">Categorías</h2>
     
         <article class="categoriesPreview-list">
           <div class="category-container category-container--loading"></div>

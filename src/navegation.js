@@ -27,7 +27,6 @@ window.addEventListener('hashchange',navigator,false);
 
 
 function navigator(){
-    // console.log({location})
     if(location.hash.startsWith('#trends=')){
         trendPage();
     }else if(location.hash.startsWith('#search=')){
@@ -56,20 +55,21 @@ function homePage() {
     categoriesPreviewSection.classList.remove('inactive');
     genericSection.classList.add('inactive');
     movieDetailSection.classList.add('inactive');
-    headerPoster.classList.remove('inactive')
+    headerPoster.classList.remove('inactive');
+
 
 
     getCategoriesPreview();
     getTrendingMoviesPreview();
+    showFavoritesSection()
     getPosterMovies()
     
     window.addEventListener('localStoregeChange',()=>{
-        if (localStorage.liked_movies[2] !== undefined) {
-            getLikedMovies()   
+        if (!isObjectEmpty(likedMoviesList())) {
+            getLikedMovies();   
             likedContainer.classList.remove('inactive');
         }else{
             likedContainer.classList.add('inactive');
-
         }      
     })
 }

@@ -33,6 +33,10 @@ function likeMovie(movie){
 }
 
 // Utils
+function isObjectEmpty(object){
+   return !Object.keys(object).length ? true : false
+}
+
 function ChangeLocalStorage(key, value){
     localStorage.setItem(key,value);
     const event = new CustomEvent('localStoregeChange',{
@@ -268,13 +272,22 @@ async function getRelatedMoviesId(id){
 
     createMovies(relatedMovies,relatedMoviesContainer)
 }
-
+// favorites movies
 function getLikedMovies(){
     const likedMovies = likedMoviesList();
     const arrLikedMovies = Object.values(likedMovies);
     createMovies(arrLikedMovies, likedMoviesListContainer,{lazyLoad: true, clean:true})
 }
+function showFavoritesSection(){
+    if(!isObjectEmpty(likedMoviesList()) && likedContainer.classList.contains('inactive')){
+        likedContainer.classList.remove('inactive');
+        getLikedMovies();   
 
+    }
+    if(isObjectEmpty(likedMoviesList()) && !(likedContainer.classList.contains('inactive'))){
+        likedContainer.classList.add('inactive');
+    }
+}
 // poster
 function posterResponsive(movie, img){
     const viwportWidth =    window.innerWidth;
@@ -295,7 +308,6 @@ function renderPoster(movie){
     const posterAverage = document.querySelector('.poster-average');
     const posterImg = document.querySelector('.poster-img');
     const posterBtnDetails = document.querySelector('.poster-btn--details');
-    const posterBtnTrailer = document.querySelector('.poster-btn--trailer');
 
 
     posterTitle.innerText = movie.title;
@@ -314,11 +326,9 @@ function renderPoster(movie){
     })
 }
 async function getPosterMovies(){
-    const {data} = await api('trending/movie/day');
+    const {data} = await api('/movie/now_playing');
     const movies = data.results.slice(0,5);
     
-
-    console.log(data)
     let indexPoster = 0;
     let currentPoster = movies[0];
 
